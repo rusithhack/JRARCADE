@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌌 StarComposer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/tone@14.8.49/build/Tone.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Star Field Background -->
+        <canvas id="starfield-canvas" class="starfield-canvas"></canvas>
+        
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="loading-screen">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <p>Initializing cosmic audio engine...</p>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="header">
+            <h1 class="title">🌌 StarComposer</h1>
+            <p class="subtitle">Sketch constellations to compose starry melodies</p>
+            <div class="header-buttons">
+                <button id="progress-btn" class="header-btn progress-btn" title="View achievements and progress">
+                    <span class="icon">🏆</span>
+                    Progress
+                </button>
+                <button id="settings-btn" class="header-btn settings-btn" title="Advanced settings and themes">
+                    <span class="icon">⚙️</span>
+                    Settings
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Canvas Area -->
+        <main class="main-content">
+            <div class="canvas-container">
+                <canvas id="visualizer-canvas" class="canvas-layer visualizer-canvas"></canvas>
+                <canvas id="line-canvas" class="canvas-layer line-canvas"></canvas>
+                <canvas id="star-canvas" class="canvas-layer star-canvas"></canvas>
+                
+                <!-- Mode indicators -->
+                <div class="mode-indicators">
+                    <div id="edit-mode-indicator" class="mode-indicator edit-mode hidden">
+                        <span class="icon">✏️</span>
+                        Edit Mode: Click stars to select
+                    </div>
+                    <div id="journey-mode-indicator" class="mode-indicator journey-mode hidden">
+                        <span class="icon">📹</span>
+                        Journey Mode
+                    </div>
+                </div>
+
+                <!-- Musical info display -->
+                <div class="musical-info">
+                    <span id="musical-key-scale">C pentatonic</span>
+                    <span id="bpm-display">120 BPM</span>
+                    <span id="star-count">0 stars</span>
+                </div>
+            </div>
+        </main>
+
+        <!-- Floating Toolbar -->
+        <div class="floating-toolbar">
+            <div class="toolbar-content">
+                <!-- Instrument Selector -->
+                <div class="control-group">
+                    <span class="icon">🎵</span>
+                    <select id="instrument-select" class="select-input" title="Select instrument type">
+                        <option value="synth">Synth</option>
+                        <option value="amsynth" disabled>🔒 AM Synth (5 stars)</option>
+                        <option value="fmsynth" disabled>🔒 FM Synth (15 stars)</option>
+                        <option value="pluck" disabled>🔒 Pluck (30 stars)</option>
+                    </select>
+                </div>
+
+                <!-- Color Selector -->
+                <div class="control-group">
+                    <span class="icon">🎨</span>
+                    <select id="color-select" class="select-input" title="Select star color">
+                        <option value="#64ffda">Cyan</option>
+                        <option value="#ff6b9d" disabled>🔒 Pink (2 plays)</option>
+                        <option value="#ffd93d" disabled>🔒 Yellow (5 plays)</option>
+                        <option value="#6bcf7f" disabled>🔒 Green (8 plays)</option>
+                        <option value="#a78bfa" disabled>🔒 Purple (12 plays)</option>
+                    </select>
+                </div>
+
+                <!-- Control Buttons -->
+                <div class="control-buttons">
+                    <button id="edit-btn" class="control-btn" title="Toggle edit mode to select and modify stars">
+                        <span class="icon">✏️</span>
+                    </button>
+                    <button id="delete-btn" class="control-btn delete-btn hidden" title="Delete selected star">
+                        <span class="icon">🗑️</span>
+                    </button>
+                    <button id="undo-btn" class="control-btn" title="Undo last action" disabled>
+                        <span class="icon">↶</span>
+                    </button>
+                    <button id="redo-btn" class="control-btn" title="Redo last undone action" disabled>
+                        <span class="icon">↷</span>
+                    </button>
+                    <button id="save-btn" class="control-btn save-btn" title="Save current constellation" disabled>
+                        <span class="icon">💾</span>
+                    </button>
+                    <button id="load-btn" class="control-btn load-btn" title="Load saved constellation">
+                        <span class="icon">📁</span>
+                    </button>
+                    <button id="share-btn" class="control-btn share-btn" title="Share constellation via URL" disabled>
+                        <span class="icon">🔗</span>
+                    </button>
+                    <button id="play-btn" class="control-btn play-btn" title="Play constellation as music" disabled>
+                        <span class="icon">▶️</span>
+                    </button>
+                    <button id="stop-btn" class="control-btn stop-btn" title="Stop playback" disabled>
+                        <span class="icon">⏹️</span>
+                    </button>
+                    <button id="clear-btn" class="control-btn clear-btn" title="Clear all stars">
+                        <span class="icon">🗑️</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Click to add stars • Press Play to hear your constellation • <span id="stars-created-count">0</span> stars created</p>
+        </footer>
+
+        <!-- Modals -->
+        <div id="progress-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><span class="icon">🏆</span> Achievements</h2>
+                    <button class="modal-close" data-modal="progress-modal">✕</button>
+                </div>
+                <div id="achievements-list" class="achievements-list">
+                    <!-- Achievements will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div id="save-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><span class="icon">💾</span> Save Constellation</h2>
+                    <button class="modal-close" data-modal="save-modal">✕</button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="constellation-name" placeholder="Enter constellation name..." class="text-input" autofocus>
+                    <div class="modal-buttons">
+                        <button id="save-confirm-btn" class="btn btn-primary" disabled>Save</button>
+                        <button class="btn btn-secondary modal-close" data-modal="save-modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="load-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><span class="icon">📁</span> Load Constellation</h2>
+                    <button class="modal-close" data-modal="load-modal">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div id="saved-constellations-list" class="saved-constellations-list">
+                        <p class="no-constellations">No saved constellations yet.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="share-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><span class="icon">🔗</span> Share Constellation</h2>
+                    <button class="modal-close" data-modal="share-modal">✕</button>
+                </div>
+                <div class="modal-body">
+                    <p class="share-description">Share this unique URL to let others experience your cosmic creation:</p>
+                    <div class="share-url-container">
+                        <div id="share-url" class="share-url"></div>
+                    </div>
+                    <div class="modal-buttons">
+                        <button id="copy-url-btn" class="btn btn-primary">
+                            <span class="icon">📋</span>
+                            Copy Link
+                        </button>
+                        <button id="open-url-btn" class="btn btn-secondary">
+                            <span class="icon">🔗</span>
+                        </button>
+                    </div>
+                    <div class="share-note">Anyone with this link can view and play your constellation</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="settings-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><span class="icon">⚙️</span> Advanced Settings</h2>
+                    <button class="modal-close" data-modal="settings-modal">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div class="settings-section">
+                        <h3><span class="icon">🎵</span> Musical Settings</h3>
+                        <div class="setting-item">
+                            <label>Tempo (BPM)</label>
+                            <input type="range" id="bpm-slider" min="60" max="180" value="120" class="slider">
+                            <div id="bpm-value" class="setting-value">120 BPM</div>
+                        </div>
+                        <div class="setting-row">
+                            <div class="setting-item">
+                                <label>Key</label>
+                                <select id="key-select" class="select-input">
+                                    <option value="C">C</option>
+                                    <option value="C#">C#</option>
+                                    <option value="D">D</option>
+                                    <option value="D#">D#</option>
+                                    <option value="E">E</option>
+                                    <option value="F">F</option>
+                                    <option value="F#">F#</option>
+                                    <option value="G">G</option>
+                                    <option value="G#">G#</option>
+                                    <option value="A">A</option>
+                                    <option value="A#">A#</option>
+                                    <option value="B">B</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <label>Scale</label>
+                                <select id="scale-select" class="select-input">
+                                    <option value="major">Major</option>
+                                    <option value="minor">Minor</option>
+                                    <option value="pentatonic" selected>Pentatonic</option>
+                                    <option value="blues">Blues</option>
+                                    <option value="chromatic">Chromatic</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="settings-section">
+                        <h3><span class="icon">🎨</span> Visual Settings</h3>
+                        <div class="setting-item">
+                            <label>Background Theme</label>
+                            <select id="theme-select" class="select-input">
+                                <option value="cosmic" selected>Cosmic</option>
+                                <option value="nebula">Nebula</option>
+                                <option value="galaxy">Galaxy</option>
+                                <option value="aurora">Aurora</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label>Playback Mode</label>
+                            <select id="playback-mode-select" class="select-input">
+                                <option value="linear" selected>Linear</option>
+                                <option value="journey">Cosmic Journey</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tooltip -->
+        <div id="tooltip" class="tooltip hidden">
+            <div class="tooltip-content"></div>
+            <div class="tooltip-arrow"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

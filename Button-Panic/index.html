@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Panic - Word Reaction Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <div id="startScreen" class="start-screen">
+            <div class="logo-section">
+                <h1 class="game-title">Button Panic</h1>
+                <div class="subtitle">Ultimate Word Reaction Challenge</div>
+            </div>
+            
+            <div class="stats-section">
+                <div class="high-score-card">
+                    <div class="high-score-label">High Score</div>
+                    <div class="high-score-value" id="highScoreDisplay">0</div>
+                </div>
+            </div>
+            
+            
+            <button class="start-btn" onclick="startGame()">
+                <span class="btn-text">Start Game</span>
+                <span class="btn-icon">🎮</span>
+            </button>
+        </div>
+
+        <div id="gameArea" style="display: none;">
+            <div class="header">
+                <div class="score-section">
+                    <div class="score-label">Score</div>
+                    <div class="score-value" id="score">0</div>
+                </div>
+                <div class="hearts" id="hearts">
+                    <span class="heart">❤️</span>
+                    <span class="heart">❤️</span>
+                    <span class="heart">❤️</span>
+                </div>
+                <div class="controls">
+                    <button class="mute-btn" id="muteBtn" onclick="toggleMute()">🔊</button>
+                </div>
+            </div>
+
+            <div class="command-section">
+                <div class="command-word" id="commandWord">READY?</div>
+                <div class="difficulty-indicator" id="difficultyIndicator">Normal Speed</div>
+            </div>
+
+            <div class="timer-container">
+                <div class="timer-bar">
+                    <div class="timer-fill" id="timerFill"></div>
+                </div>
+                <div class="timer-text" id="timerText">2.0s</div>
+            </div>
+
+            <div class="buttons-container" id="buttonsContainer">
+                <button class="game-button" onclick="selectAnswer(0)"></button>
+                <button class="game-button" onclick="selectAnswer(1)"></button>
+                <button class="game-button" onclick="selectAnswer(2)"></button>
+                <button class="game-button" onclick="selectAnswer(3)"></button>
+            </div>
+
+            <div class="feedback" id="feedback"></div>
+        </div>
+    </div>
+
+    <div class="game-over" id="gameOver">
+        <div class="game-over-content">
+            <h2 id="gameOverTitle">Game Over!</h2>
+            <div class="final-stats">
+                <div class="final-score">Final Score: <span id="finalScore">0</span></div>
+                <div class="high-score-result" id="highScoreResult"></div>
+            </div>
+            <button class="restart-btn" onclick="restartGame()">Play Again</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

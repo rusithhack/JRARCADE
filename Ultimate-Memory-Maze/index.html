@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Maze - Test Your Memory</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen active">
+            <div class="container">
+                <h1 class="title">Memory Maze</h1>
+                <p class="subtitle">Test your short-term memory by reproducing the path</p>
+                <div class="stats">
+                    <div class="stat">
+                        <span class="stat-label">Best Level</span>
+                        <span id="best-level" class="stat-value">1</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Games Won</span>
+                        <span id="games-won" class="stat-value">0</span>
+                    </div>
+                </div>
+                <button id="start-btn" class="btn btn-primary">Start Game</button>
+                <button id="how-to-play-btn" class="btn btn-secondary">How to Play</button>
+            </div>
+        </div>
+
+        <!-- How to Play Screen -->
+        <div id="how-to-play-screen" class="screen">
+            <div class="container">
+                <h2>How to Play</h2>
+                <div class="instructions">
+                    <div class="instruction">
+                        <span class="step">1</span>
+                        <p>Watch carefully as the path from start (green) to finish (red) is highlighted</p>
+                    </div>
+                    <div class="instruction">
+                        <span class="step">2</span>
+                        <p>Memorize the sequence of tiles in the path</p>
+                    </div>
+                    <div class="instruction">
+                        <span class="step">3</span>
+                        <p>Click the tiles in the correct order to reproduce the path</p>
+                    </div>
+                    <div class="instruction">
+                        <span class="step">4</span>
+                        <p>Complete the path to advance to the next level!</p>
+                    </div>
+                </div>
+                <button id="back-to-start-btn" class="btn btn-primary">Got It!</button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <div class="level-info">
+                    <span id="current-level">Level 1</span>
+                    <span id="game-status">Get Ready...</span>
+                </div>
+                <div class="progress-info">
+                    <span id="progress">0 / 0</span>
+                    <span id="timer">0.0s</span>
+                </div>
+            </div>
+            
+            <div id="maze-container">
+                <div id="maze-grid"></div>
+            </div>
+            
+            <div class="game-controls">
+                <button id="restart-level-btn" class="btn btn-secondary">Restart Level</button>
+                <button id="give-up-btn" class="btn btn-outline">Give Up</button>
+                <button id="back-to-menu-btn" class="btn btn-outline">Menu</button>
+            </div>
+        </div>
+
+        <!-- Win Screen -->
+        <div id="win-screen" class="screen">
+            <div class="container">
+                <h2 class="win-title">Level Complete!</h2>
+                <div class="win-stats">
+                    <div class="win-stat">
+                        <span class="label">Time</span>
+                        <span id="completion-time" class="value">0.0s</span>
+                    </div>
+                    <div class="win-stat">
+                        <span class="label">Accuracy</span>
+                        <span id="accuracy" class="value">100%</span>
+                    </div>
+                </div>
+                <div class="win-controls">
+                    <button id="next-level-btn" class="btn btn-primary">Next Level</button>
+                    <button id="replay-level-btn" class="btn btn-secondary">Replay Level</button>
+                    <button id="win-menu-btn" class="btn btn-outline">Main Menu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="game-over-screen" class="screen">
+            <div class="container">
+                <h2 class="game-over-title">Wrong Path!</h2>
+                <p class="game-over-message">Don't worry, try again. The correct path is highlighted.</p>
+                <div class="game-over-controls">
+                    <button id="try-again-btn" class="btn btn-primary">Try Again</button>
+                    <button id="game-over-menu-btn" class="btn btn-outline">Main Menu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/main.js"></script>
+    <script src="storage.js"></script>
+    <script src="maze.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

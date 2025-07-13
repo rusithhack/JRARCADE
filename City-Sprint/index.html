@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Sprint - Endless Runner</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="gameContainer">
+        <!-- Start Screen -->
+        <div id="startScreen" class="screen">
+            <div class="neon-border">
+                <h1 class="game-title">CITY SPRINT</h1>
+                <div class="stats">
+                    <p>Best Score: <span id="bestScoreDisplay">0m</span></p>
+                </div>
+                <div class="buttons">
+                    <button id="startButton" class="neon-button">START GAME</button>
+                    <button id="howToPlayButton" class="neon-button secondary">HOW TO PLAY</button>
+                </div>
+                <div id="skinSelector" class="skin-selector">
+                    <h3>Runner Skins</h3>
+                    <div id="skinOptions" class="skin-options"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="gameScreen" class="screen hidden">
+            <canvas id="gameCanvas"></canvas>
+            <div class="hud">
+                <div class="hud-left">
+                    <span id="currentScore">0m</span>
+                </div>
+                <div class="hud-right">
+                    <span id="bestScore">Best: 0m</span>
+                </div>
+                <div class="hud-center">
+                    <div id="speedBar" class="speed-bar">
+                        <div id="speedFill" class="speed-fill"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="controls-hint">
+                <p>TAP to JUMP • SWIPE DOWN to SLIDE</p>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameOverScreen" class="screen hidden">
+            <div class="neon-border">
+                <h2 class="game-over-title">GAME OVER</h2>
+                <div class="final-stats">
+                    <p>Distance: <span id="finalScore">0m</span></p>
+                    <p>Best: <span id="finalBestScore">0m</span></p>
+                    <div id="newRecord" class="new-record hidden">NEW RECORD!</div>
+                    <div id="unlockMessage" class="unlock-message hidden"></div>
+                </div>
+                <div class="motivational-quote">
+                    <p id="motivationalText"></p>
+                </div>
+                <div class="buttons">
+                    <button id="playAgainButton" class="neon-button">PLAY AGAIN</button>
+                    <button id="returnMenuButton" class="neon-button secondary">MAIN MENU</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- How to Play Modal -->
+        <div id="howToPlayModal" class="modal hidden">
+            <div class="modal-content neon-border">
+                <h3>HOW TO PLAY</h3>
+                <div class="instructions">
+                    <p><strong>JUMP:</strong> Spacebar, Up Arrow, or Tap</p>
+                    <p><strong>SLIDE:</strong> Down Arrow or Swipe Down</p>
+                    <p><strong>GOAL:</strong> Avoid obstacles and run as far as possible</p>
+                    <p><strong>UNLOCKS:</strong> New skins every 500m</p>
+                </div>
+                <button id="closeModalButton" class="neon-button">GOT IT</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="storage.js"></script>
+    <script src="input.js"></script>
+    <script src="graphics.js"></script>
+    <script src="game.js"></script>
+    <script src="ui.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

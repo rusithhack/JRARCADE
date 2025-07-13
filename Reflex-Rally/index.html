@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reflex Rally - Lightning Fast Reaction Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background">
+        <div class="stars"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Start Screen -->
+    <div id="startScreen" class="screen active">
+        <div class="container">
+            <h1 class="title">
+                <span class="title-glow">REFLEX</span>
+                <span class="title-accent">RALLY</span>
+            </h1>
+            <p class="subtitle">Lightning-fast reaction challenge</p>
+            
+            <div class="score-display">
+                <div class="best-score">
+                    <span class="label">Best Score</span>
+                    <span id="displayBestScore" class="value">0</span>
+                </div>
+            </div>
+
+            <div class="menu-buttons">
+                <button id="startGame" class="btn btn-primary">
+                    <span>Start Game</span>
+                </button>
+                <button id="twoPlayerMode" class="btn btn-secondary">
+                    <span>Split Screen Mode</span>
+                </button>
+                <button id="turnBasedMode" class="btn btn-secondary">
+                    <span>Turn-Based Mode</span>
+                </button>
+                <button id="dailyChallenge" class="btn btn-secondary">
+                    <span>Daily Challenge</span>
+                </button>
+                <button id="howToPlay" class="btn btn-outline">
+                    <span>How to Play</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="gameScreen" class="screen">
+        <div class="game-hud">
+            <div class="hud-left">
+                <div class="score">
+                    <span class="label">Score</span>
+                    <span id="currentScore" class="value">0</span>
+                </div>
+            </div>
+            <div class="hud-center">
+                <div id="comboDisplay" class="combo hidden">
+                    <span id="comboCount">0</span>
+                    <span class="combo-text">COMBO!</span>
+                </div>
+            </div>
+            <div class="hud-right">
+                <div class="best">
+                    <span class="label">Best</span>
+                    <span id="gameBestScore" class="value">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="gameArea" class="game-area">
+            <!-- Dynamic shapes will appear here -->
+        </div>
+
+        <div id="pauseBtn" class="pause-btn">⏸️</div>
+    </div>
+
+    <!-- Player Setup Screen -->
+    <div id="playerSetupScreen" class="screen">
+        <div class="container">
+            <h2 class="setup-title">Turn-Based Mode</h2>
+            <p class="setup-subtitle">Each player gets 30 seconds to score as many points as possible!</p>
+            
+            <div class="player-inputs">
+                <div class="input-group">
+                    <label for="player1Name">Player 1 Name</label>
+                    <input type="text" id="player1Name" placeholder="Player 1" maxlength="15">
+                </div>
+                <div class="input-group">
+                    <label for="player2Name">Player 2 Name</label>
+                    <input type="text" id="player2Name" placeholder="Player 2" maxlength="15">
+                </div>
+            </div>
+
+            <div class="menu-buttons">
+                <button id="startTurnBasedGame" class="btn btn-primary">
+                    <span>Start Game</span>
+                </button>
+                <button id="backFromSetup" class="btn btn-outline">
+                    <span>Back</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Turn-Based Game Screen -->
+    <div id="turnBasedGameScreen" class="screen">
+        <div class="turn-based-hud">
+            <div class="hud-left">
+                <div class="current-player">
+                    <span class="label">Current Player</span>
+                    <span id="currentPlayerName" class="value">Player 1</span>
+                </div>
+            </div>
+            <div class="hud-center">
+                <div class="timer-display">
+                    <span id="turnTimer" class="timer-value">30</span>
+                    <span class="timer-label">seconds</span>
+                </div>
+            </div>
+            <div class="hud-right">
+                <div class="turn-score">
+                    <span class="label">Score</span>
+                    <span id="turnScore" class="value">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="turnBasedGameArea" class="game-area">
+            <!-- Dynamic shapes will appear here -->
+        </div>
+
+        <div class="turn-progress">
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill"></div>
+            </div>
+            <div class="turn-indicator">
+                <span id="turnIndicator">Player 1's Turn</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Turn Transition Screen -->
+    <div id="turnTransitionScreen" class="screen">
+        <div class="container">
+            <h2 id="turnOverTitle" class="turn-over-title">Player 1's Turn Complete!</h2>
+            
+            <div class="turn-result">
+                <div class="turn-stat">
+                    <span class="label">Score</span>
+                    <span id="turnFinalScore" class="value">0</span>
+                </div>
+                <div class="turn-stat">
+                    <span class="label">Accuracy</span>
+                    <span id="turnAccuracy" class="value">100%</span>
+                </div>
+            </div>
+
+            <div class="next-player-info">
+                <p id="nextPlayerText">Get ready, Player 2!</p>
+            </div>
+
+            <div class="menu-buttons">
+                <button id="startNextTurn" class="btn btn-primary">
+                    <span id="nextTurnButtonText">Start Player 2's Turn</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Turn-Based Results Screen -->
+    <div id="turnBasedResultsScreen" class="screen">
+        <div class="container">
+            <h2 id="turnBasedWinnerTitle" class="game-over-title">Player 1 Wins! 🎉</h2>
+            
+            <div class="turn-based-final-results">
+                <div class="player-result">
+                    <h3 id="finalPlayer1Name">Player 1</h3>
+                    <div class="result-stats">
+                        <div class="stat">
+                            <span class="label">Score</span>
+                            <span id="finalPlayer1Score" class="value">0</span>
+                        </div>
+                        <div class="stat">
+                            <span class="label">Accuracy</span>
+                            <span id="finalPlayer1Accuracy" class="value">100%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="vs-divider">VS</div>
+                
+                <div class="player-result">
+                    <h3 id="finalPlayer2Name">Player 2</h3>
+                    <div class="result-stats">
+                        <div class="stat">
+                            <span class="label">Score</span>
+                            <span id="finalPlayer2Score" class="value">0</span>
+                        </div>
+                        <div class="stat">
+                            <span class="label">Accuracy</span>
+                            <span id="finalPlayer2Accuracy" class="value">100%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="match-summary">
+                <p id="matchSummary">An epic battle of reflexes!</p>
+            </div>
+
+            <div class="menu-buttons">
+                <button id="rematchTurnBased" class="btn btn-primary">
+                    <span>Rematch</span>
+                </button>
+                <button id="backToMenuFromTurnBased" class="btn btn-outline">
+                    <span>Main Menu</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Two Player Game Screen -->
+    <div id="twoPlayerScreen" class="screen">
+        <div class="two-player-hud">
+            <div class="player-hud player-1">
+                <div class="player-name">Player 1</div>
+                <div class="player-score">
+                    <span class="label">Score</span>
+                    <span id="player1Score" class="value">0</span>
+                </div>
+            </div>
+            <div class="center-divider"></div>
+            <div class="player-hud player-2">
+                <div class="player-name">Player 2</div>
+                <div class="player-score">
+                    <span class="label">Score</span>
+                    <span id="player2Score" class="value">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="two-player-areas">
+            <div id="player1Area" class="player-area">
+                <div class="player-label">Player 1</div>
+            </div>
+            <div class="area-divider"></div>
+            <div id="player2Area" class="player-area">
+                <div class="player-label">Player 2</div>
+            </div>
+        </div>
+
+        <div id="twoPlayerPauseBtn" class="pause-btn">⏸️</div>
+    </div>
+
+    <!-- Two Player Game Over Screen -->
+    <div id="twoPlayerGameOverScreen" class="screen">
+        <div class="container">
+            <h2 id="winnerTitle" class="game-over-title">Player 1 Wins!</h2>
+            
+            <div class="two-player-final-stats">
+                <div class="player-final-stat">
+                    <h3>Player 1</h3>
+                    <div class="stat">
+                        <span class="label">Final Score</span>
+                        <span id="player1FinalScore" class="value">0</span>
+                    </div>
+                </div>
+                <div class="vs-divider">VS</div>
+                <div class="player-final-stat">
+                    <h3>Player 2</h3>
+                    <div class="stat">
+                        <span class="label">Final Score</span>
+                        <span id="player2FinalScore" class="value">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-buttons">
+                <button id="playAgainTwoPlayer" class="btn btn-primary">
+                    <span>Play Again</span>
+                </button>
+                <button id="backToMenuFromTwoPlayer" class="btn btn-outline">
+                    <span>Main Menu</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="gameOverScreen" class="screen">
+        <div class="container">
+            <h2 class="game-over-title">Game Over!</h2>
+            
+            <div class="final-stats">
+                <div class="stat">
+                    <span class="label">Final Score</span>
+                    <span id="finalScore" class="value">0</span>
+                </div>
+                <div class="stat">
+                    <span class="label">Best Score</span>
+                    <span id="finalBestScore" class="value">0</span>
+                </div>
+                <div class="stat">
+                    <span class="label">Max Combo</span>
+                    <span id="maxCombo" class="value">0</span>
+                </div>
+            </div>
+
+            <div id="newRecord" class="new-record hidden">
+                🎉 NEW RECORD! 🎉
+            </div>
+
+            <div class="performance-text">
+                <span id="performanceMessage"></span>
+            </div>
+
+            <div class="menu-buttons">
+                <button id="playAgain" class="btn btn-primary">
+                    <span>Play Again</span>
+                </button>
+                <button id="backToMenu" class="btn btn-outline">
+                    <span>Main Menu</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- How to Play Modal -->
+    <div id="howToPlayModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>How to Play</h3>
+                <button id="closeModal" class="close-btn">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="instruction">
+                    <div class="instruction-icon">🎯</div>
+                    <div class="instruction-text">
+                        <h4>Tap the Shapes</h4>
+                        <p>Click or tap the glowing shapes before they disappear</p>
+                    </div>
+                </div>
+                <div class="instruction">
+                    <div class="instruction-icon">⚡</div>
+                    <div class="instruction-text">
+                        <h4>Speed Increases</h4>
+                        <p>Each successful tap makes the next shape appear for less time</p>
+                    </div>
+                </div>
+                <div class="instruction">
+                    <div class="instruction-icon">🔥</div>
+                    <div class="instruction-text">
+                        <h4>Build Combos</h4>
+                        <p>Hit multiple shapes in a row for bonus points and effects</p>
+                    </div>
+                </div>
+                <div class="instruction">
+                    <div class="instruction-icon">💎</div>
+                    <div class="instruction-text">
+                        <h4>Daily Challenge</h4>
+                        <p>One attempt per day with a unique pattern for all players</p>
+                    </div>
+                </div>
+                <div class="instruction">
+                    <div class="instruction-icon">👥</div>
+                    <div class="instruction-text">
+                        <h4>Two Player Mode</h4>
+                        <p>Split screen competition - first to miss loses!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Particle Effects Container -->
+    <div id="particleContainer" class="particle-container"></div>
+
+    <!-- Audio (silent, for future sound effects) -->
+    <audio id="audioContext" preload="none"></audio>
+
+    <script src="utils.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

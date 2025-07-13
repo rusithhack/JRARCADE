@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Painter Duel</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Start Screen -->
+    <div id="startScreen" class="screen active">
+        <div class="screen-container">
+            <div class="game-card">
+                <div class="game-header">
+                    <div class="game-icon">🎨</div>
+                    <h1 class="game-title">Pixel Painter Duel</h1>
+                    <p class="game-subtitle">Turn-based pixel painting battle!</p>
+                </div>
+                
+                <div class="settings-section">
+                    <div class="setting-group">
+                        <label for="gridSize" class="setting-label">Grid Size:</label>
+                        <select id="gridSize" class="setting-select">
+                            <option value="16">16x16 (Quick)</option>
+                            <option value="20">20x20 (Epic)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <label for="imagePack" class="setting-label">Image Pack:</label>
+                        <select id="imagePack" class="setting-select">
+                            <option value="animals">🐱 Animals</option>
+                            <option value="food">🍕 Food</option>
+                            <option value="objects">🏠 Objects</option>
+                            <option value="emoji" disabled>😀 Emoji (Locked)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button id="startButton" class="btn btn-primary btn-large">
+                    <span class="btn-icon">▶</span>
+                    Start Duel!
+                </button>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="p1Wins">0</div>
+                        <div class="stat-label">Player 1 Wins</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="p2Wins">0</div>
+                        <div class="stat-label">Player 2 Wins</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="gamesPlayed">0</div>
+                        <div class="stat-label">Games Played</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="gameScreen" class="screen">
+        <div class="game-layout">
+            <div class="game-header-bar">
+                <div class="turn-indicator">
+                    <div class="player-avatar" id="playerAvatar">P1</div>
+                    <div class="turn-text">
+                        <span id="currentPlayer">Player 1</span>'s Turn
+                    </div>
+                </div>
+                <div class="game-stats">
+                    <span id="pixelsPlaced">0</span> pixels placed
+                </div>
+                <button id="quitButton" class="btn btn-quit btn-small">
+                    <span class="btn-icon">🏠</span>
+                    Quit
+                </button>
+            </div>
+            
+            <div class="game-content">
+                <div class="canvas-section">
+                    <div class="canvas-container">
+                        <div id="pixelGrid" class="pixel-grid"></div>
+                        <div id="hintOverlay" class="hint-overlay"></div>
+                    </div>
+                </div>
+                
+                <div class="controls-section">
+                    <div class="control-card">
+                        <div class="control-group">
+                            <h3 class="control-title">
+                                <span class="control-icon">🎨</span>
+                                Colors
+                            </h3>
+                            <div class="color-palette">
+                                <button class="color-btn active" data-color="#000000" style="background: #000000" title="Black"></button>
+                                <button class="color-btn" data-color="#FF0000" style="background: #FF0000" title="Red"></button>
+                                <button class="color-btn" data-color="#00FF00" style="background: #00FF00" title="Green"></button>
+                                <button class="color-btn" data-color="#0000FF" style="background: #0000FF" title="Blue"></button>
+                                <button class="color-btn" data-color="#FFFF00" style="background: #FFFF00" title="Yellow"></button>
+                                <button class="color-btn" data-color="#FFFFFF" style="background: #FFFFFF; border: 2px solid #333" title="White"></button>
+                            </div>
+                        </div>
+                        
+                        <div class="control-group">
+                            <h3 class="control-title">
+                                <span class="control-icon">💭</span>
+                                Make a Guess
+                            </h3>
+                            <div class="guess-section">
+                                <input type="text" id="guessInput" class="guess-input" placeholder="What is it?" maxlength="20">
+                                <button id="guessButton" class="btn btn-secondary">
+                                    <span class="btn-icon">✓</span>
+                                    Guess!
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="control-group">
+                            <h3 class="control-title">
+                                <span class="control-icon">⚡</span>
+                                Actions
+                            </h3>
+                            <div class="action-buttons">
+                                <button id="hintButton" class="btn btn-hint">
+                                    <span class="btn-icon">💡</span>
+                                    Hint (<span id="hintsLeft">1</span> left)
+                                </button>
+                                <button id="undoButton" class="btn btn-undo">
+                                    <span class="btn-icon">↶</span>
+                                    Undo (<span id="undosLeft">1</span> left)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Victory Screen -->
+    <div id="victoryScreen" class="screen">
+        <div class="screen-container">
+            <div class="victory-card">
+                <div class="victory-header">
+                    <div class="victory-icon">🎉</div>
+                    <h1 id="victoryTitle" class="victory-title">Player 1 Wins!</h1>
+                    <p id="victoryMessage" class="victory-message">Correct guess: "cat"</p>
+                </div>
+                
+                <div class="final-images">
+                    <div class="image-comparison">
+                        <div class="final-canvas">
+                            <h3 class="comparison-title">Your Creation</h3>
+                            <div id="finalPlayerGrid" class="pixel-grid small"></div>
+                        </div>
+                        <div class="original-image">
+                            <h3 class="comparison-title">Original Image</h3>
+                            <div id="originalGrid" class="pixel-grid small"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="victory-stats">
+                    <div class="victory-stat">
+                        <span class="victory-stat-label">Pixels placed:</span>
+                        <span id="finalPixelCount" class="victory-stat-value">0</span>
+                    </div>
+                    <div class="victory-stat">
+                        <span class="victory-stat-label">Turns taken:</span>
+                        <span id="finalTurnCount" class="victory-stat-value">0</span>
+                    </div>
+                </div>
+                
+                <div class="victory-buttons">
+                    <button id="playAgainButton" class="btn btn-primary btn-large">
+                        <span class="btn-icon">🔄</span>
+                        Play Again
+                    </button>
+                    <button id="changePackButton" class="btn btn-secondary">
+                        <span class="btn-icon">📦</span>
+                        Change Pack
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confetti Container -->
+    <div id="confetti" class="confetti-container"></div>
+
+    <script src="images.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
